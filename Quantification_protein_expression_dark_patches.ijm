@@ -4,7 +4,7 @@
  * Macro used in paper "placeholder". In this case, dark patches are the mutant patches in channel1 and we delimite these pacthes to the domain
  * present in channel3. These patches are then used as ROIs to identify channel2 protein expression (using fluorescence intensity as proxy).
  * 
- * By José Serrado Marques
+ * Author: José Serrado Marques, IGC, jpmarques@igc.gulbenkian.pt
  * 
  * v1.0 - 2020/06/26
  */
