@@ -31,7 +31,7 @@ function processFolder(input) {
 		if (File.isDirectory(input + File.separator + current_file)) {
 			processFolder(input + File.separator + current_file);
 		}
-		if (current_file == "Composite.png") {
+		if (endsWith(current_file, ".png") || endsWith(current_file, ".tif")) {
 			processFile(input, processed_images_dir, current_file);
 		}
 
@@ -40,7 +40,7 @@ function processFolder(input) {
 
 
 function processFile(input, processed_images_dir, file) { 
-	// open file 
+	// open file and split channels for mask creation
 	path_file = input + File.separator + file;
 	open(path_file);
 	composite_image = getTitle();
