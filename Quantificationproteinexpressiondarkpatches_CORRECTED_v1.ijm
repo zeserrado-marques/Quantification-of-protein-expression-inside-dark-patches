@@ -9,7 +9,7 @@
  * v1.1 - 2020/09/09
  * 
  * changes: 
- * - Use Guassian Blur with radius of 20 and Threshold method Yen dark to better create the channel 3 domain's mask
+ * - Use Gaussian Blur with radius of 20 and Threshold method Yen dark to better create the channel 3 domain's mask
  * - Binary operations on channel 3 mask removed, as the input images might have too much variation
  * - forced "run("Set Measurements...", "mean redirect=None decimal=3");" to make sure mean gray value is measured
  */
