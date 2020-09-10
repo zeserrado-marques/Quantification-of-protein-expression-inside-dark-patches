@@ -6,12 +6,13 @@
  * 
  * Author: José Serrado Marques, IGC, jpmarques@igc.gulbenkian.pt
  * 
- * v1.1 - 2020/09/09
+ * v1.2 - 2020/09/10
  * 
  * changes: 
  * - Use Gaussian Blur with radius of 20 and Threshold method Yen dark to better create the channel 3 domain's mask
  * - Binary operations on channel 3 mask removed, as the input images might have too much variation
  * - forced "run("Set Measurements...", "mean redirect=None decimal=3");" to make sure mean gray value is measured
+ * - Added error detection if input image is or is not RGB with 3 channels or composite/grayscale with 3 channels
  */
 print("\\Clear");
 // choose parent input folder and output folder for images, rois and results
@@ -49,31 +50,42 @@ function processFile(input, processed_images_dir, file) {
 	path_file = input + File.separator + file;
 	open(path_file);
 	
-	// Checks if image is either RGB or has 3 channels
+	// get image info
 	getDimensions(width, height, channels, slices, frames);
 	image_info = getImageInfo();
-	
+	composite_image = getTitle();
+	composite_name = substring(composite_image, 0, lengthOf(composite_image) - 4);
+	run("Split Channels");
+	list_open_images = getList("image.titles");
+
+
+	// Checks if image is either RGB or has 3 channels
 	if (indexOf(image_info, "RGB") != -1) {
-		
-		composite_image = getTitle();
-		composite_name = substring(composite_image, 0, lengthOf(composite_image) - 4);
-		run("Split Channels");
+		// check if RGB has an empty channel
+		for (a = 0; a < nImages; a++) {
+			selectWindow(list_open_images[a]);
+			getStatistics(area, mean);
+			if (mean == 0) {
+				Dialog.create("Error");
+				Dialog.addMessage("Please make sure the image is either a composite or RGB");
+				Dialog.show();
+				exit;
+			}
+		}	
 		run("Merge Channels...", "c1=["+ composite_image + " (green)] c2=["+ composite_image + " (blue)] c3=["+ composite_image + " (red)] create");
 		Stack.setDisplayMode("grayscale");
 	} 
 	else if (channels == 3){
-		composite_image = getTitle();
-		composite_name = substring(composite_image, 0, lengthOf(composite_image) - 4);
-		run("Split Channels");
 		run("Merge Channels...", "c1=C1-" + composite_image + " c2=C2-" + composite_image + " c3=C3-" + composite_image + " create");
-		Stack.setDisplayMode("grayscale");
+		print("hey, ho, let's go");
 	}
 	else {
-		Dialog.create("");
+		Dialog.create("Error");
 		Dialog.addMessage("Please make sure the image is either a composite or RGB");
 		Dialog.show();
 		exit;
 	}
+
 	
 	rename("Max_Zproject_image_3");
 	to_measure_image = getTitle();
