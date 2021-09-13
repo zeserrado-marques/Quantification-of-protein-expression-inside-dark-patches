@@ -4,6 +4,11 @@ This macro was used in an unpublished paper. It yields the mean gray value of ch
 
 Please try the macro for yourself using the available dataset. Images are courtesy from Catarina Gaspar - csgaspar@igc.gulbenkian.pt
 
+### How to run
+- Open Fiji
+- Open the *.ijm* file in Fiji
+- Click **Run**
+
 Any questions, please send me an email at jpmarques@igc.gulbenkian.pt.
 
 Thanks
