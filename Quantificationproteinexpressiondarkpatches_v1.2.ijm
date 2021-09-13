@@ -21,9 +21,13 @@ processed_images_dir = getDirectory("Output folder where to save processed image
 
 // batch mode enables macro to run faster 
 setBatchMode("hide");
+start_time = getTime();
 
 // call function
 processFolder(input_dir);
+
+end_time = getTime();
+runtime(start_time, end_time);
 
 function processFolder(input) { 
 	// get a list of file names (strings) and loop through them with for (condition is len(list_files))
@@ -40,7 +44,6 @@ function processFolder(input) {
 		if (endsWith(current_file, ".png") || endsWith(current_file, ".tif")) {
 			processFile(input, processed_images_dir, current_file);
 		}
-
 	}
 }
 
@@ -175,3 +178,13 @@ function processFile(input, processed_images_dir, file) {
 	roiManager("select", roi_index_list);
 	roiManager("delete");
 }
+
+function runtime(start_time, end_time) { 
+	// print time in minutes and seconds
+	total_time = end_time - start_time;
+	minutes_remanider = total_time % (60 * 1000);
+	minutes = (total_time - minutes_remanider) / (60 * 1000);
+	seconds = minutes_remanider / 1000;
+	print("Macro runtime was " + minutes + " minutes and " + seconds + " seconds.");
+}
+
